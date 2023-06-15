@@ -27,6 +27,17 @@ class User:
                 users.append(cls(user))
         return users
 
+    @classmethod
+    def get_one(cls, data):
+        query = """
+        SELECT *
+        FROM users
+        WHERE id = %(id)s;
+        """
+        results = connectToMySQL(cls.DB).query_db(query, data)
+
+        return cls(results[0])
+
 # This will add the data into the query
     @classmethod
     def add_user(cls, data):
@@ -36,3 +47,25 @@ class User:
         """
         result = connectToMySQL(cls.DB).query_db(query, data)
         return result
+
+# update
+    @classmethod
+    def update_user(cls, data):
+        query = """
+        UPDATE users
+        SET first_name = %(first_name)s, last_name = %(last_name)s, email = %(email)s
+        WHERE id = %(id)s;
+        """
+
+        return connectToMySQL(cls.DB).query_db(query, data)
+
+
+# delete
+    @classmethod
+    def delete(cls, data):
+        query = """
+        DELETE FROM users
+        WHERE id = %(id)s;
+        """
+
+        return connectToMySQL(cls.DB).query_db(query, data)
